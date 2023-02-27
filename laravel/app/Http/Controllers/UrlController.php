@@ -17,7 +17,7 @@ class UrlController extends Controller
     public function index()
     {
         //
-        $url = Url::all();
+        $url = Url::latest()->get();
         return response($url, Response::HTTP_OK);
     }
 
@@ -43,7 +43,7 @@ class UrlController extends Controller
     public function show(Url $url)
     {
         //
-        return redirect($url->shortUrl);
+        return redirect($url->originalUrl);
     }
 
     /**
