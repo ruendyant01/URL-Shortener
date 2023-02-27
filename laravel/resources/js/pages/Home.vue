@@ -1,5 +1,5 @@
 <template>
-    <div class="space-y-4">
+    <div class="space-y-4 flex flex-col items-center">
         <div class="text-center space-y-6 mt-2">
             <h2 class="text-4xl">Shorten URL</h2>
             <div class="space-x-4">
@@ -7,9 +7,27 @@
                 <i @click="submit" class="fa-solid fa-paper-plane text-xl text-blue-500 cursor-pointer"></i>
             </div>
         </div>
-        <div v-if="error" class="text-center">
+        <div v-if="error">
             <p class="text-red-500">{{ error }}</p>
         </div>
+        <table class="border-collapse">
+            <thead>
+                <tr>
+                    <th>Original Url</th>
+                    <th>Shorten Url</th>
+                    <th>Visits</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody v-for="item in items" :key="item.id">
+                <tr class="[&_*]:p-3">
+                    <td class="w-12">{{ item.originalUrl }}</td>
+                    <td><a :href="item.shortUrl" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i>{{ item.shortUrl }}</a></td>
+                    <td>{{ item.visits }}</td>
+                    <td><i class="fa-solid fa-xmark text-lg text-red-400 hover:cursor-pointer hover:text-red-600"></i></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -23,18 +41,27 @@ export default {
     data()  {
         return {
             originalUrl: "",
-            error: ""
+            error: "",
+            items: []
         }
     },
     methods: {
         submit() {
             if(this.originalUrl.length === 0) return;
             axios.post("/api/url", {originalUrl: this.originalUrl})
-            .then(res => toast("Success created"))
+            .then(res => {
+                toast("Success created")
+                this.originalUrl = "";
+            })
             .catch(err => {
                 this.error = err.response.data.errors.originalUrl[0];
             })
         }
+    },
+    created() {
+        axios.get("/api/url")
+        .then(res => this.items = res.data)
+        .catch(err => toast("error fetching"))
     }
 }
 </script>
