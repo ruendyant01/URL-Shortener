@@ -16,6 +16,7 @@
                     <th>Original Url</th>
                     <th>Shorten Url</th>
                     <th>Visits</th>
+                    <th>Created At</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -24,6 +25,7 @@
                     <td class="w-12">{{ item.originalUrl }}</td>
                     <td><a :href="item.path" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i>{{ item.shortUrl }}</a></td>
                     <td>{{ item.visits }}</td>
+                    <td>{{ item.created_at }}</td>
                     <td><i @click="destroy(item)" class="fa-solid fa-xmark text-lg text-red-400 hover:cursor-pointer hover:text-red-600"></i></td>
                 </tr>
             </tbody>
@@ -53,7 +55,7 @@ export default {
                 console.log(res);
                 toast("Success created")
                 this.originalUrl = "";
-                this.items.push(res.data);
+                this.items.unshift(res.data);
             })
             .catch(err => {
                 this.error = err.response.data.errors.originalUrl[0];

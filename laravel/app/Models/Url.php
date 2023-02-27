@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -24,7 +26,19 @@ class Url extends Model
         });
     }
 
-    public function getPathAttribute() {
-        return asset("u/".$this->shortUrl);
+    // public function getPathAttribute() {
+    //     return asset("u/".$this->shortUrl);
+    // }
+
+    protected function path() : Attribute {
+        return Attribute::make(
+            get: fn(mixed $val) => asset("u/".$this->shortUrl)
+        );
+    }
+
+    protected function createdAt() : Attribute {
+        return Attribute::make(
+            get: fn($val) => Carbon::parse($val)->diffForHumans()
+        );
     }
 }
