@@ -18,4 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get("/{url}", [UrlController::class, "show"]);
+Route::get("u/{url}", [UrlController::class, "show"]);

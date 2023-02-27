@@ -9,7 +9,10 @@ use Illuminate\Support\Str;
 class Url extends Model
 {
     use HasFactory;
+
     protected $fillable = ["originalUrl"];
+
+    protected $appends = ["path"];
 
     public function getRouteKeyName()
     {
@@ -21,4 +24,7 @@ class Url extends Model
         });
     }
 
+    public function getPathAttribute() {
+        return asset("u/".$this->shortUrl);
+    }
 }
