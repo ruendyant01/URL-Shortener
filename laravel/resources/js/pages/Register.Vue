@@ -23,7 +23,8 @@ export default {
                         name: "",
                         password: "",
                         password_confirmation: ""
-            }
+                    }
+                // window.location = "/login"
             })
             .catch(err => toast("Failed Register"))
         }
