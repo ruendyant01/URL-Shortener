@@ -10,6 +10,12 @@
 import AppFooter from './components/Footer.vue'
 import AppHeader from './components/Header.vue'
     export default {
-        components: {AppFooter,AppHeader}
+        components: {AppFooter,AppHeader},
+        // created() {
+        //     if(document.cookie.indexOf("XSRF-TOKEN") !== -1) {
+        //         window.loggedIn = true;
+        //         this.loggedIn = window.loggedIn
+        //     };
+        // }
     }
 </script>

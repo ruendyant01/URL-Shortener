@@ -12,6 +12,10 @@
         <script src="https://kit.fontawesome.com/d561733e28.js" crossorigin="anonymous"></script>
         @vite('resources/js/app.js')
 
+        <script>
+            window.loggedIn = {{auth()->check()}}
+        </script>
+
         <!-- Styles -->
     </head>
     <body class="antialiased">

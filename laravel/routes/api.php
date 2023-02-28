@@ -19,4 +19,4 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::apiResource("/url", UrlController::class);
+Route::apiResource("/url", UrlController::class)->middleware("auth:sanctum");

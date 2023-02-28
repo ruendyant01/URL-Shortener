@@ -10,7 +10,7 @@
         <div v-if="error">
             <p class="text-red-500">{{ error }}</p>
         </div>
-        <table class="border-collapse mt-8">
+        <table v-if="loggedIn" class="border-collapse mt-8">
             <thead>
                 <tr>
                     <th>Original Url</th>
@@ -30,6 +30,7 @@
                 </tr>
             </tbody>
         </table>
+        <h2 v-else class="text-3xl">You not logged in yet</h2>
     </div>
 </template>
 
@@ -44,7 +45,8 @@ export default {
         return {
             originalUrl: "",
             error: "",
-            items: []
+            items: [],
+            loggedIn: window.loggedIn
         }
     },
     methods: {
@@ -67,13 +69,20 @@ export default {
                 this.items = this.items.filter(val => val.id !== item.id);
                 toast("Delete Successfull");
             })
-            .catch(err => toast("Delete Failed"))
+            .catch(err => {
+                toast("Delete Failed");
+            })
         }
     },
     created() {
+        console.log(document.cookie.indexOf("XSRF-TOKEN"));
         axios.get("/api/url")
-        .then(res => this.items = res.data)
-        .catch(err => toast("error fetching"))
+        .then(res => {
+            this.items = res.data;
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 }
 </script>
