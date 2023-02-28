@@ -21,7 +21,4 @@ Route::get('/', function () {
 });
 
 Route::get("u/{url}", [UrlController::class, "show"]);
-Route::post("/register", [RegisterController::class, "register"]);
-Route::post("/login", [LoginController::class, "login"]);
-Route::post("/logout", [LoginController::class, "logout"]);
 // Auth::routes();

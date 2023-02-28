@@ -25,14 +25,16 @@ class StoreUrlRequest extends FormRequest
     {
         return [
             //
-            "originalUrl" => "required|url"
+            "originalUrl" => "required|url",
+            "user_id" => "required|numeric"
         ];
     }
 
     public function messages() {
         return [
             "originalUrl.url" => "Original Url must be Valid Url",
-            "originalUrl.required" => "Original Url cannot be empty"
+            "originalUrl.required" => "Original Url cannot be empty",
+            "user_id.required" => "User Id not valid"
         ];
     }
 }

@@ -1,4 +1,4 @@
-import {createRouter,createWebHashHistory} from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 
 import Login from './pages/Login.vue';
 import Register from './pages/Register.vue';
@@ -20,8 +20,24 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes
 });
+
+router.beforeEach((to,from,next) => {
+    let middleware = to.matched[0].components.default.middleware;
+    if(middleware === "auth") {
+        if(!window.loggedIn) {
+            next("/login");
+            return;
+        }
+    } else {
+        if(window.loggedIn) {
+            next("/");
+            return;
+        }
+    }
+    next();
+})
 
 export default router;

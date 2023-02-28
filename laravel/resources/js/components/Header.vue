@@ -24,7 +24,7 @@ export default {
     },
     methods: {
         logout() {
-            axios.post("/logout")
+            axios.post("/api/logout")
             .then(res => {
                 toast("Logout Successfull");
                 window.loggedIn = false;

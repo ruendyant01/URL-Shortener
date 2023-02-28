@@ -12,7 +12,7 @@ class Url extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["originalUrl"];
+    protected $fillable = ["originalUrl",'user_id'];
 
     protected $appends = ["path"];
 
@@ -25,10 +25,6 @@ class Url extends Model
             $url->shortUrl = Str::random(5);
         });
     }
-
-    // public function getPathAttribute() {
-    //     return asset("u/".$this->shortUrl);
-    // }
 
     protected function path() : Attribute {
         return Attribute::make(

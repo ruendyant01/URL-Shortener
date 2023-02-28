@@ -14,11 +14,13 @@ class UrlController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(string $id)
     {
         //
-        $url = Url::latest()->get();
+        // $url = Url::latest()->get();
+        $url = Url::where("user_id", +$id)->latest()->get();
         return response($url, Response::HTTP_OK);
+        // return response("", Response::HTTP_OK);
     }
 
     /**
@@ -30,7 +32,7 @@ class UrlController extends Controller
     public function store(StoreUrlRequest $request)
     {
         //
-        $rest = Url::create(["originalUrl" => $request->originalUrl]);
+        $rest = Url::create($request->all());
         return response($rest, Response::HTTP_CREATED);
     }
 

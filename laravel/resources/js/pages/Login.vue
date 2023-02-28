@@ -12,6 +12,7 @@
 <script>
 import { toast } from 'vue3-toastify';
 export default {
+    middleware:"guest",
     data() {
         return {
             form: {
@@ -22,7 +23,7 @@ export default {
     },
     methods: {
         submit() {
-            axios.post('/login', this.form)
+            axios.post('/api/login', this.form)
             .then(res => {
                 console.log(res);
                 toast("Login Successfull");

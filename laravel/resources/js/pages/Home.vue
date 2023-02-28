@@ -24,7 +24,7 @@
                 <tr class="[&_*]:p-3">
                     <td class="w-12">{{ item.originalUrl }}</td>
                     <td><a :href="item.path" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i>{{ item.shortUrl }}</a></td>
-                    <td>{{ item.visits }}</td>
+                    <td>{{ item.visits ?? 0 }}</td>
                     <td>{{ item.created_at }}</td>
                     <td><i @click="destroy(item)" class="fa-solid fa-xmark text-lg text-red-400 hover:cursor-pointer hover:text-red-600"></i></td>
                 </tr>
@@ -41,6 +41,7 @@ import {toast} from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 export default {
+    middleware: "auth",
     data()  {
         return {
             originalUrl: "",
@@ -52,9 +53,8 @@ export default {
     methods: {
         submit() {
             if(this.originalUrl.length === 0) return;
-            axios.post("/api/url", {originalUrl: this.originalUrl})
+            axios.post("/api/url", {originalUrl: this.originalUrl, user_id: window.user.id})
             .then(res => {
-                console.log(res);
                 toast("Success created")
                 this.originalUrl = "";
                 this.items.unshift(res.data);
@@ -75,8 +75,7 @@ export default {
         }
     },
     created() {
-        console.log(document.cookie.indexOf("XSRF-TOKEN"));
-        axios.get("/api/url")
+        axios.get("/api/urls/"+(+window.user.id))
         .then(res => {
             this.items = res.data;
         })

@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import {toast} from 'vue3-toastify';
 export default {
+    middleware: "guest",
     data() {
         return {
             form : {
@@ -15,7 +16,7 @@ export default {
     },
     methods: {
         submit() {
-            axios.post("/register", this.form)
+            axios.post("/api/register", this.form)
             .then(res => {
                 toast("Successfull Created");
                 this.form = {
