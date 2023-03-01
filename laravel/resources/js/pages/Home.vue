@@ -23,7 +23,7 @@
             <tbody v-for="item in items" :key="item.id">
                 <tr class="[&_*]:p-3">
                     <td class="w-12">{{ item.originalUrl }}</td>
-                    <td><a :href="item.path" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i>{{ item.shortUrl }}</a></td>
+                    <td><a @click="updateVisit(item)" :href="item.path" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i>{{ item.shortUrl }}</a></td>
                     <td>{{ item.visits ?? 0 }}</td>
                     <td>{{ item.created_at }}</td>
                     <td><i @click="destroy(item)" class="fa-solid fa-xmark text-lg text-red-400 hover:cursor-pointer hover:text-red-600"></i></td>
@@ -51,6 +51,9 @@ export default {
         }
     },
     methods: {
+        updateVisit(item) {
+            this.items[this.items.findIndex(val => val.id === item.id)].visits++;
+        },
         submit() {
             if(this.originalUrl.length === 0) return;
             axios.post("/api/url", {originalUrl: this.originalUrl, user_id: window.user.id})
@@ -83,5 +86,15 @@ export default {
             console.log(err);
         })
     }
+    // updated() {
+    //     console.log("on update");
+    //     axios.get("/api/urls/"+(+window.user.id))
+    //     .then(res => {
+    //         this.items = res.data;
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //     })
+    // }
 }
 </script>
