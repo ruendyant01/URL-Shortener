@@ -24,7 +24,6 @@ export default {
         submit() {
             axios.post("/password/email", this.form)
             .then(res => {
-                // console.log(res);
                 toast("Success Send Reset Link");
                 this.form = {email:""};
             })
