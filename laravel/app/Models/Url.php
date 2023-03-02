@@ -12,7 +12,7 @@ class Url extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["originalUrl",'user_id'];
+    protected $fillable = ["originalUrl",'user_id',"title"];
 
     protected $appends = ["path"];
 

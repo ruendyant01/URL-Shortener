@@ -3,6 +3,7 @@
         <div class="text-center space-y-6 mt-2">
             <h2 class="text-4xl">Shorten URL</h2>
             <div class="space-x-4">
+                <input class="text-xl" type="text" name="title" v-model="title" placeholder="Title">
                 <input class="text-xl" type="text" name="url" v-model="originalUrl" placeholder="Enter Your URL">
                 <i @click="submit" class="fa-solid fa-paper-plane text-xl text-blue-500 cursor-pointer"></i>
             </div>
@@ -10,9 +11,11 @@
         <div v-show="error">
             <p class="text-red-500">{{ error }}</p>
         </div>
-        <table v-if="items.data.length > 0" class="border-collapse mt-8">
+        <div v-if="items.data.length > 0">
+        <table class="border-collapse mt-8">
             <thead>
                 <tr>
+                    <th>Title</th>
                     <th>Original Url</th>
                     <th>Shorten Url</th>
                     <th>Visits</th>
@@ -22,6 +25,7 @@
             </thead>
             <tbody v-for="item in items.data" :key="item.id">
                 <tr class="[&_*]:p-3">
+                    <td class="w-12">{{ item.title }}</td>
                     <td class="w-12">{{ item.originalUrl }}</td>
                     <td>
                         <span @click="copyShorten(item.path)">{{ item.shortUrl }}</span>
@@ -34,12 +38,13 @@
                 </tr>
             </tbody>
         </table>
-        <h2 v-else class="text-3xl">No Shorten URl</h2>
         <div class="flex space-x-4 justify-center w-full">
             <span class="hover:cursor-pointer" @click="prev">&lt;&lt;</span>
             <p>{{ this.items.current_page }}</p>
             <span class="hover:cursor-pointer" @click="next">>></span>
         </div>
+    </div>
+        <h2 v-else class="text-3xl">No Shorten URl</h2>
     </div>
     <h2 v-else class="text-3xl">You not logged in yet</h2>
 </template>
@@ -55,6 +60,7 @@ export default {
     data()  {
         return {
             originalUrl: "",
+            title:"",
             error: "",
             items: [],
             loggedIn: window.loggedIn
@@ -69,30 +75,31 @@ export default {
         },
         submit() {
             if(this.originalUrl.length === 0) return;
-            axios.post("/api/url", {originalUrl: this.originalUrl, user_id: window.user.id})
+            axios.post("/api/url", {originalUrl: this.originalUrl, user_id: window.user.id, title:this.title})
             .then(res => {
                 toast("Success created")
+                this.title = "";
                 this.originalUrl = "";
-                this.items.unshift(res.data);
+                // this.items.data.unshift(res.data);
+                this.fetchData();
             })
             .catch(err => {
-                this.error = err.response.data.errors.originalUrl[0];
+                this.error = err.response.data.errors.message;
             })
         },
         destroy(item) {
             axios.delete("/api/url/"+item.shortUrl)
-            .then(res => {
-                this.items = this.items.filter(val => val.id !== item.id);
+            .then(() => {
+                this.items.data = this.items.data.filter(val => val.id !== item.id);
                 toast("Delete Successfull");
             })
-            .catch(err => {
+            .catch(() => {
                 toast("Delete Failed");
             })
         },
         fetchData(page = 1) {
             axios.get(`/api/urls/${(+window.user.id)}/?page=${page}`)
             .then(res => {
-                console.log(res);
                 this.items = res.data;
             })
             .catch(err => {
@@ -112,7 +119,6 @@ export default {
     },
     created() {
         this.fetchData();
-        console.log(this.items);
     }
 }
 </script>
