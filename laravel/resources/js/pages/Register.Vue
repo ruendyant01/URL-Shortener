@@ -11,7 +11,8 @@ export default {
                 name: "",
                 password: "",
                 password_confirmation: ""
-            }
+            },
+            error: ""
         }
     },
     methods: {
@@ -25,9 +26,12 @@ export default {
                         password: "",
                         password_confirmation: ""
                     }
-                // window.location = "/login"
+                window.location = "/login"
             })
-            .catch(err => toast("Failed Register"))
+            .catch(err => {
+                this.error = err.response.data.message;
+                toast("Failed Register")
+            })
         }
     }
 }
@@ -36,6 +40,7 @@ export default {
 <template>
     <div class="flex flex-col items-center space-y-8 mt-2">
         <h1 class="text-4xl">Register</h1>
+        <span v-if="error" class="text-red-500">{{ error }}</span>
         <form @submit.prevent="submit" class="flex flex-col space-y-4 [&_input]:py-1 [&_input]:px-3 [&_input]:border-b [&_input]:border-slate-400">
             <input type="text" name="username" placeholder="Username" v-model="form.name">
             <input type="email" name="email" placeholder="Email" v-model="form.email">
